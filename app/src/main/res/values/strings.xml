@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TransitionFirebaseTest</string>
+    <string name="title_activity_reference">ReferenceActivity</string>
+    <string name="username_post_placeholder">Allen Walker</string>
+    <string name="collection_text_placeholder">Cosplay Plus</string>
+    <string name="time_post_placeholder">39min</string>
+    <string name="post_placeholder_content">Beautiful koneko cosplay.</string>
+    <string name="button_plus_one">+1</string>
+    <string name="plus_one_text_placeholder">+9</string>
+</resources>
