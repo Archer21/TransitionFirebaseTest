@@ -23,6 +23,14 @@
     <dimen name="card_full_margin_top">8dp</dimen>
     <dimen name="card_button_margin_top">16dp</dimen>
     <dimen name="post_image_card_size">200dp</dimen>
+    <dimen name="post_list_offset">4dp</dimen>
+    <dimen name="detail_appbar_height">276dp</dimen>
+    <dimen name="textsize_usernamedetail">18sp</dimen>
+    <dimen name="textsize_likenumberdetail">15sp</dimen>
+    <dimen name="marginleft_secondword">10sp</dimen>
+    <dimen name="height_divider">1dp</dimen>
+    <dimen name="paddingtop_tittleimagedetail">16dp</dimen>
+    <dimen name="padding_horizontal_textcontendetail">16dp</dimen>
 </resources>
 
 

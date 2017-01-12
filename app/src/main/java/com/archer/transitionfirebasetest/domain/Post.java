@@ -6,10 +6,19 @@ package com.archer.transitionfirebasetest.domain;
 
 public class Post {
 
+    private String avatar;
     private String urlImage;
-    private String title;
+    private String username;
     private int    likes;
     private String content;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getUrlImage() {
         return urlImage;
@@ -19,12 +28,12 @@ public class Post {
         this.urlImage = urlImage;
     }
 
-    public String getTitle() {
-        return title;
+    public String getUsername() {
+        return username;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getLikes() {

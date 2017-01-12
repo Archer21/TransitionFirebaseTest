@@ -75,11 +75,12 @@
                 android:paddingLeft="@dimen/card_padding"
                 android:paddingRight="@dimen/card_padding"/>
 
+            <!--android:src="@drawable/koneko"-->
             <ImageView
                 android:id="@+id/image_post"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/post_image_card_size"
-                android:src="@drawable/koneko"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/post_image_card_size"
                 android:scaleType="centerCrop"
                 android:layout_marginTop="@dimen/card_full_margin_top"/>
 
@@ -105,7 +106,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/card_full_margin_top"
                 android:layout_marginEnd="@dimen/card_full_margin_top"
-                android:background="@drawable/ripple"/>
+                android:background="@drawable/ripple" />
 
             <TextView
                 android:id="@+id/count_plus_one"
@@ -127,7 +128,9 @@
                 android:src="@mipmap/ic_comments"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/button_share"
-                android:layout_toStartOf="@+id/button_share" />
+                android:layout_toStartOf="@+id/button_share"
+
+                android:background="@drawable/ripple_light_gray"/>
 
             <ImageButton
                 android:id="@+id/button_share"
@@ -136,7 +139,8 @@
                 android:src="@mipmap/ic_share"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/ripple_light_gray"/>
 
 
         </RelativeLayout>
