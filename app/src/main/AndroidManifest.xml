@@ -28,7 +28,45 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.MainActivity" />
         </activity>
-        <activity android:name=".view.activity.ContainerActivity"></activity>
+        <activity android:name=".view.activity.ContainerActivity">
+
+        </activity>
     </application>
 
 </manifest>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

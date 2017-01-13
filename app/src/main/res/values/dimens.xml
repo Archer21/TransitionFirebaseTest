@@ -31,6 +31,10 @@
     <dimen name="height_divider">1dp</dimen>
     <dimen name="paddingtop_tittleimagedetail">16dp</dimen>
     <dimen name="padding_horizontal_textcontendetail">16dp</dimen>
+
+    <!-- Bottombar -->
+    <dimen name="bottombar_height">72dp</dimen>
+    <dimen name="button_height">48dp</dimen>
 </resources>
 
 

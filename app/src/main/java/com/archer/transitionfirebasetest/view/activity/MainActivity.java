@@ -8,12 +8,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.adapter.PostAdapter;
 import com.archer.transitionfirebasetest.common.BaseActivity;
 import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.domain.Post;
+import com.archer.transitionfirebasetest.util.Helpers;
 import com.archer.transitionfirebasetest.util.ItemOffsetDecorator;
 
 import java.util.ArrayList;
@@ -78,6 +80,10 @@ public class MainActivity extends BaseActivity {
         posts.add(post3);
 
         adapter.addAll(posts);
+    }
+
+    public void goContainerLayout (View v) {
+        Helpers.navigate(MainActivity.this, ContainerActivity.class);
     }
 
     @Override

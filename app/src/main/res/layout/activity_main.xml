@@ -8,6 +8,15 @@
     tools:context="com.archer.transitionfirebasetest.view.activity.ReferenceActivity">
 
     <!--<include layout="@layout/appbar" />-->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="Go to Container Layout"
+        android:textColor="@android:color/white"
+        android:background="@color/bb_darkBackgroundColor"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:onClick="goContainerLayout"/>
+
     <include layout="@layout/content_main" />
 
 </android.support.design.widget.CoordinatorLayout>
