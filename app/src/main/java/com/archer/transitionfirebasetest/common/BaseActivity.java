@@ -49,11 +49,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    public void setupToolbar (Toolbar toolbar) {
+    public void setupToolbar (Toolbar toolbar, String title, boolean upButton) {
         if (toolbar != null) {
             // will be automatically injected with butterknife
             // if a toolbar was defined
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(upButton);
         } else {
             Log.e("BaseActivity", "ERROR IN THIS IMPLEMENTATION");
         }
