@@ -153,12 +153,12 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
      */
     @Override
     public void showProgressBar() {
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
-
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
