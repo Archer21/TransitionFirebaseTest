@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.common.BaseActivity;
 import com.archer.transitionfirebasetest.common.BasePresenter;
+import com.archer.transitionfirebasetest.mvp.presenter.SignupPresenter;
 import com.archer.transitionfirebasetest.mvp.viewmodel.SignupViewModel;
 import com.archer.transitionfirebasetest.util.Helpers;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,8 +48,7 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
     /**
      * References
      */
-    private FirebaseAuth auth;
-
+    SignupPresenter presenter;
 
     /**
      * Activity Lifecycle methods
@@ -56,38 +56,14 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        auth = FirebaseAuth.getInstance();
+        presenter = new SignupPresenter(this);
     }
 
     /**
      * Activity methods
      */
 
-    private boolean checkEmail (String email) {
-        if (email.isEmpty() || !Helpers.isEmailValid(email)) {
-            signupInputLayoutEmail.setErrorEnabled(true);
-            signupInputLayoutEmail.setError(getResources().getString(R.string.err_msg_email));
-            signupInputEmail.setError(getResources().getString(R.string.err_msg_required));
-            Helpers.requestFocus(SignupActivity.this, signupInputEmail);
-            return false;
-        }
 
-        signupInputLayoutEmail.setErrorEnabled(false);
-        return true;
-    }
-
-    private boolean checkPassword (String password) {
-        if (password.isEmpty() || !Helpers.isPasswordValid(password)) {
-            signupInputLayoutPassword.setErrorEnabled(true);
-            signupInputLayoutPassword.setError(getResources().getString(R.string.err_msg_password));
-            signupInputPassword.setError(getResources().getString(R.string.err_msg_required));
-            Helpers.requestFocus(SignupActivity.this, signupInputPassword);
-            return false;
-        }
-
-        signupInputLayoutPassword.setErrorEnabled(false);
-        return true;
-    }
 
 
     /**
@@ -101,31 +77,7 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
         String email = signupInputEmail.getText().toString().trim();
         String password = signupInputPassword.getText().toString().trim();
 
-        if (!checkEmail(email)) {
-            return;
-        }
-        if (!checkPassword(password)) {
-            return;
-        }
-
-        signupInputLayoutEmail.setErrorEnabled(false);
-        signupInputLayoutPassword.setErrorEnabled(false);
-
-        progressBar.setVisibility(View.VISIBLE);
-
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        Snackbar.make(coordinatorLayout, getResources().getString(R.string.email_password_unsuccessful_signup_message) + " " + task.getException(), Snackbar.LENGTH_LONG).show();
-                        progressBar.setVisibility(View.GONE);
-                    } else {
-                        Helpers.navigate(SignupActivity.this, LoginActivity.class);
-                        finish();
-                    }
-                }
-            });
+        presenter.checkInformation(email, password);
     }
 
 
@@ -144,7 +96,7 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
 
     @Override
     public BasePresenter getPresenter() {
-        return null;
+        return presenter;
     }
 
 
@@ -163,7 +115,9 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
 
     @Override
     public void showEmailError() {
-
+        signupInputLayoutEmail.setErrorEnabled(true);
+        signupInputLayoutEmail.setError(getResources().getString(R.string.err_msg_email));
+        signupInputEmail.setError(getResources().getString(R.string.err_msg_required));
     }
 
     @Override
@@ -171,6 +125,27 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
         signupInputLayoutPassword.setErrorEnabled(true);
         signupInputLayoutPassword.setError(getResources().getString(R.string.err_msg_password));
         signupInputPassword.setError(getResources().getString(R.string.err_msg_required));
+    }
+
+    @Override
+    public void focusInputEmail() {
+        Helpers.requestFocus(SignupActivity.this, signupInputEmail);
+    }
+
+    @Override
+    public void focusInputPassword() {
+        Helpers.requestFocus(SignupActivity.this, signupInputPassword);
+    }
+
+    @Override
+    public void showFirebaseSignupError () {
+        Snackbar.make(coordinatorLayout, getResources().getString(R.string.email_password_unsuccessful_signup_message), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void goLoginScreen() {
+        Helpers.navigate(SignupActivity.this, LoginActivity.class);
+        finish();
     }
 }
 
