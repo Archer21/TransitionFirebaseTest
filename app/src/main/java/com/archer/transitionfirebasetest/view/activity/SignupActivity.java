@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.common.BaseActivity;
 import com.archer.transitionfirebasetest.common.BasePresenter;
+import com.archer.transitionfirebasetest.mvp.viewmodel.SignupViewModel;
 import com.archer.transitionfirebasetest.util.Helpers;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 
-public class SignupActivity extends BaseActivity {
+public class SignupActivity extends BaseActivity implements SignupViewModel {
 
     /**
      * Bind views with Butterkniffe
@@ -144,6 +145,32 @@ public class SignupActivity extends BaseActivity {
     @Override
     public BasePresenter getPresenter() {
         return null;
+    }
+
+
+    /**
+     * Override methods from SignupViewModel
+     */
+    @Override
+    public void showProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+    }
+
+    @Override
+    public void showEmailError() {
+
+    }
+
+    @Override
+    public void showPasswordError() {
+        signupInputLayoutPassword.setErrorEnabled(true);
+        signupInputLayoutPassword.setError(getResources().getString(R.string.err_msg_password));
+        signupInputPassword.setError(getResources().getString(R.string.err_msg_required));
     }
 }
 
