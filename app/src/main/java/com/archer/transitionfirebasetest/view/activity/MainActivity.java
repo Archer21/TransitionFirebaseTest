@@ -1,7 +1,11 @@
 package com.archer.transitionfirebasetest.view.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +14,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.archer.transitionfirebasetest.MyApplication;
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.adapter.PostAdapter;
 import com.archer.transitionfirebasetest.common.BaseActivity;
@@ -17,23 +22,65 @@ import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.domain.Post;
 import com.archer.transitionfirebasetest.util.Helpers;
 import com.archer.transitionfirebasetest.util.ItemOffsetDecorator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
 
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.posts_recycler_view)
     RecyclerView list;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
+
+    private MyApplication app;
     private PostAdapter adapter;
+    private DatabaseReference postReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        app = (MyApplication) getApplicationContext();
         adapter = new PostAdapter(MainActivity.this, R.layout.item_post_card);
+        postReference = app.getPostReference();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//                Snackbar.make(coordinatorLayout, username, Snackbar.LENGTH_SHORT).show();
+
+                createNewPost();
+
+
+            }
+        });
+    }
+
+    private void createNewPost() {
+        SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
+
+        String username = sharedPreferences.getString("username", "");
+
+        HashMap<String, Object> timeStampCreated = new HashMap<>();
+        timeStampCreated.put("timestamp", ServerValue.TIMESTAMP);
+
+        Post post = new Post();
+        post.setUsername(username);
+        post.setTimeStampCreated(timeStampCreated);
+
+        postReference.push().setValue(post);
     }
 
     @Override
@@ -53,7 +100,6 @@ public class MainActivity extends BaseActivity {
     public void setDummieContent () {
         List<Post> posts = new ArrayList<>();
         Post post1 = new Post();
-        post1.setAvatar("http://i868.photobucket.com/albums/ab244/rikikai/horo01.png");
         post1.setUsername("Horo");
         post1.setContent("I love Spice and Wolf");
         post1.setUrlImage("http://www.1999.co.jp/itbig07/10070972a.jpg");

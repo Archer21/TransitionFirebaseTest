@@ -54,9 +54,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(PostViewHolder holder, int position) {
         Post currentPost = posts.get(position);
         holder.setUsername(currentPost.getUsername());
-        holder.setAvatar(currentPost.getAvatar());
         holder.setCollection(currentPost.getContent());
         holder.setContent(currentPost.getContent());
+        holder.setAvatar(currentPost.getAvatar());
+
+
 
         if (currentPost.getUrlImage() != null) {
             holder.setImage(currentPost.getUrlImage());
@@ -97,7 +99,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
 
         public void setAvatar (String url) {
-            Picasso.with(ACTIVITY).load(url).into(avatar);
+            if (url != null) {
+                Picasso.with(ACTIVITY).load(url).into(avatar);
+            } else {
+                Picasso.with(ACTIVITY).load(R.drawable.avatar_placeholder).into(avatar);
+            }
         }
 
         public void setUsername (String username) {

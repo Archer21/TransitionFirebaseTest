@@ -1,5 +1,6 @@
 package com.archer.transitionfirebasetest.view.activity;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 
@@ -96,6 +98,13 @@ public class LoginActivity extends BaseActivity {
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    FirebaseUser user = task.getResult().getUser();
+                    String username = user.getDisplayName();
+                    SharedPreferences.Editor sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE).edit();
+                    sharedPreferences.putString("username", username);
+                    sharedPreferences.apply();
+
                     if (!task.isSuccessful()) {
 
                         progressBar.setVisibility(View.GONE);

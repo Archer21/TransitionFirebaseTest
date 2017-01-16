@@ -1,16 +1,23 @@
 package com.archer.transitionfirebasetest.domain;
 
+import java.util.HashMap;
+
 /**
  * Created by archer on 11-01-17.
  */
 
 public class Post {
 
+    private String uid;
     private String avatar;
     private String urlImage;
     private String username;
     private int    likes;
     private String content;
+    private HashMap<String, Object> timeStampCreated;
+
+    public Post() {
+    }
 
     public String getAvatar() {
         return avatar;
@@ -50,6 +57,22 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public HashMap<String, Object> getTimeStampCreated() {
+        return timeStampCreated;
+    }
+
+    public void setTimeStampCreated(HashMap<String, Object> timeStampCreated) {
+        this.timeStampCreated = timeStampCreated;
     }
 }
 

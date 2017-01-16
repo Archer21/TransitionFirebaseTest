@@ -1,5 +1,6 @@
 package com.archer.transitionfirebasetest.view.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
 
@@ -29,6 +32,11 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
     /**
      * Bind views with Butterkniffe
      */
+    @BindView(R.id.signup_input_layout_username)
+    TextInputLayout signupInputLayoutUsername;
+    @BindView(R.id.signup_input_username)
+    TextInputEditText signupInputUsername;
+
     @BindView(R.id.signup_input_layout_email)
     TextInputLayout signupInputLayoutEmail;
     @BindView(R.id.signup_input_email)
@@ -121,6 +129,12 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
                         Snackbar.make(coordinatorLayout, getResources().getString(R.string.email_password_unsuccessful_signup_message) + " " + task.getException(), Snackbar.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                     } else {
+                        FirebaseUser user = task.getResult().getUser();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(signupInputUsername.getText().toString())
+                                .build();
+
+                        user.updateProfile(profileUpdates);
                         Helpers.navigate(SignupActivity.this, LoginActivity.class);
                         finish();
                     }
