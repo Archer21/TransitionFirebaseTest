@@ -57,6 +57,8 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
      * References
      */
     SignupPresenter presenter;
+    FirebaseAuth auth;
+
 
     /**
      * Activity Lifecycle methods
@@ -65,6 +67,7 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new SignupPresenter(this);
+        auth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -85,13 +88,6 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
         String email = signupInputEmail.getText().toString().trim();
         String password = signupInputPassword.getText().toString().trim();
 
-<<<<<<< HEAD
-        if (!checkEmail(email)) {
-            return;
-        }
-        if (!checkPassword(password)) {
-            return;
-        }
 
         signupInputLayoutEmail.setErrorEnabled(false);
         signupInputLayoutPassword.setErrorEnabled(false);
@@ -117,9 +113,7 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
                     }
                 }
             });
-=======
         presenter.checkInformation(email, password);
->>>>>>> 5ddd7ef6598ac6e9d06e8e73eac289c599d46bee
     }
 
 

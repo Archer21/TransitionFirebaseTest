@@ -2,9 +2,7 @@ package com.archer.transitionfirebasetest.mvp.interactor;
 
 import android.support.annotation.NonNull;
 
-import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.io.callback.SignupServerCallback;
-import com.archer.transitionfirebasetest.util.Helpers;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

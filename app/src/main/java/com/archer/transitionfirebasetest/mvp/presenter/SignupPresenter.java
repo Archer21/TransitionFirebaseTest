@@ -2,7 +2,6 @@ package com.archer.transitionfirebasetest.mvp.presenter;
 
 import android.util.Log;
 
-import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.io.callback.SignupServerCallback;
 import com.archer.transitionfirebasetest.mvp.interactor.SignupInteractor;
