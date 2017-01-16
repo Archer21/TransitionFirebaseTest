@@ -9,4 +9,37 @@ public interface SignupViewModel {
     void hideProgressBar ();
     void showEmailError ();
     void showPasswordError ();
+    void focusInputEmail ();
+    void focusInputPassword ();
+    void showFirebaseSignupError ();
+    void goLoginScreen ();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
