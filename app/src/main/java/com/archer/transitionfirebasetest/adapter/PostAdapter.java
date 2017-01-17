@@ -79,6 +79,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return posts.size();
     }
 
+    public void addPost(Post post) {
+        posts.add(post);
+        notifyDataSetChanged();
+    }
+
     class PostViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.avatar_post)

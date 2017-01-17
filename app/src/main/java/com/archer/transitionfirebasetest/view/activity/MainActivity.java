@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.archer.transitionfirebasetest.MyApplication;
@@ -23,8 +24,12 @@ import com.archer.transitionfirebasetest.domain.Post;
 import com.archer.transitionfirebasetest.util.Helpers;
 import com.archer.transitionfirebasetest.util.ItemOffsetDecorator;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +40,7 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
 
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.posts_recycler_view)
@@ -69,25 +75,64 @@ public class MainActivity extends BaseActivity {
     }
 
     private void createNewPost() {
-        SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
-
-        String username = sharedPreferences.getString("username", "");
-
-        HashMap<String, Object> timeStampCreated = new HashMap<>();
-        timeStampCreated.put("timestamp", ServerValue.TIMESTAMP);
-
-        Post post = new Post();
-        post.setUsername(username);
-        post.setTimeStampCreated(timeStampCreated);
-
-        postReference.push().setValue(post);
+//        SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
+//
+//        String username = sharedPreferences.getString("username", "");
+//
+//        HashMap<String, Object> timeStampCreated = new HashMap<>();
+//        timeStampCreated.put("timestamp", ServerValue.TIMESTAMP);
+//
+//        Post post = new Post();
+//        post.setUsername(username);
+//        post.setTimeStampCreated(timeStampCreated);
+//
+//        postReference.push().setValue(post);
+        Helpers.navigate(MainActivity.this, CreateNewPost.class);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         setupList();
-        setDummieContent();
+        loadPostsFromFirebase();
+    }
+
+    private void loadPostsFromFirebase () {
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e(LOG_TAG, "AddedL:" + dataSnapshot.getKey());
+                Post post = dataSnapshot.getValue(Post.class);
+                adapter.addPost(post);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.e(LOG_TAG, "Updated: " + dataSnapshot.getKey());
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.e(LOG_TAG, "Deleted:" + dataSnapshot.getKey());
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.e(LOG_TAG, "Moved:" + dataSnapshot.getKey());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        postReference.addChildEventListener(childEventListener);
+
+
     }
 
     public void setupList () {
