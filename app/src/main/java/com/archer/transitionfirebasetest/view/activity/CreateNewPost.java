@@ -12,6 +12,8 @@ public class CreateNewPost extends BaseActivity {
 
 
 
+
+
     @Override
     public int getLayout() {
         return R.layout.activity_create_new_post;
@@ -27,3 +29,32 @@ public class CreateNewPost extends BaseActivity {
         return null;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
