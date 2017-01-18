@@ -5,5 +5,6 @@ package com.archer.transitionfirebasetest.util;
  */
 
 public class Constants {
-    public static final String FIREBASE_DATABASE_LOCATION_POST = "posts";
+    public static final String FIREBASE_DATABASE_LOCATION_POSTS = "posts";
+    public static final String FIREBASE_DATABASE_LOCATION_USERS = "users";
 }

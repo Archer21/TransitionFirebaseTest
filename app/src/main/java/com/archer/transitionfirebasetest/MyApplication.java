@@ -12,7 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class MyApplication extends Application {
-    DatabaseReference postReference;
+    DatabaseReference postsReference;
+    DatabaseReference usersReference;
     Context context;
 
     @Override
@@ -23,12 +24,17 @@ public class MyApplication extends Application {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.setPersistenceEnabled(true);
 
-        postReference = firebaseDatabase.getReference(Constants.FIREBASE_DATABASE_LOCATION_POST);
+        postsReference = firebaseDatabase.getReference(Constants.FIREBASE_DATABASE_LOCATION_POSTS);
+        usersReference = firebaseDatabase.getReference(Constants.FIREBASE_DATABASE_LOCATION_USERS);
     }
 
-    public DatabaseReference getPostReference () {
-        return postReference;
+    public DatabaseReference getPostsReference () {
+        return postsReference;
     }
+    public DatabaseReference getUsersReference () {
+        return usersReference;
+    }
+
 
     public Context getContext () {
         return context;

@@ -54,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(PostViewHolder holder, int position) {
         Post currentPost = posts.get(position);
         holder.setUsername(currentPost.getUsername());
-        holder.setCollection(currentPost.getContent());
+        holder.setCollection(currentPost.getCommunity());
         holder.setContent(currentPost.getContent());
         holder.setAvatar(currentPost.getAvatar());
 

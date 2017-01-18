@@ -14,6 +14,7 @@ public class Post {
     private String username;
     private int    likes;
     private String content;
+    private String community;
     private HashMap<String, Object> timeStampCreated;
 
     public Post() {
@@ -73,6 +74,14 @@ public class Post {
 
     public void setTimeStampCreated(HashMap<String, Object> timeStampCreated) {
         this.timeStampCreated = timeStampCreated;
+    }
+
+    public String getCommunity() {
+        return community;
+    }
+
+    public void setCommunity(String community) {
+        this.community = community;
     }
 }
 

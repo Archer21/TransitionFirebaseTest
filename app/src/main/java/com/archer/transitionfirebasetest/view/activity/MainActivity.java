@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
 
         app = (MyApplication) getApplicationContext();
         adapter = new PostAdapter(MainActivity.this, R.layout.item_post_card);
-        postReference = app.getPostReference();
+        postReference = app.getPostsReference();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +94,11 @@ public class MainActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         setupList();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         loadPostsFromFirebase();
     }
 
