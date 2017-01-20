@@ -24,14 +24,50 @@
         android:layout_marginTop="24dp"
         android:layout_below="@+id/content"/>
 
+    <LinearLayout
+        android:id="@+id/select_photos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/spinner"
+        android:layout_marginTop="24dp"
+        android:gravity="center">
+
+
+        <Button
+            android:id="@+id/btn_take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginRight="24dp"
+            android:text="Take a photo"
+            android:onClick="takePhoto"/>
+
+        <Button
+            android:id="@+id/btn_upload_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Upload a photo"
+            android:onClick="selectPhotoFromGallery"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/selected_image"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:maxHeight="200dp"
+        android:layout_below="@+id/select_photos"
+        android:layout_marginTop="25dp"
+        android:scaleType="centerCrop"/>
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create post"
         android:layout_marginTop="24dp"
-        android:layout_below="@+id/spinner"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:onClick="createNewPost"/>
 
 </RelativeLayout>
