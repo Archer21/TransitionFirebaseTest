@@ -7,6 +7,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 /**
  * Created by archer on 14-01-17.
@@ -20,7 +22,7 @@ public class SignupInteractor {
         this.presenter = presenter;
     }
 
-    public void createUserWithEmailAndPassword (String email, String password) {
+    public void createUserWithEmailAndPassword (final String username, String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -28,6 +30,12 @@ public class SignupInteractor {
                     if (!task.isSuccessful()) {
                         presenter.onFailedSignup();
                     } else {
+                        FirebaseUser user = task.getResult().getUser();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(username)
+                                .build();
+
+                        user.updateProfile(profileUpdates);
                         presenter.onSuccessSignup();
                     }
                 }

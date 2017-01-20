@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -60,6 +62,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             Log.e("BaseActivity", "ERROR IN THIS IMPLEMENTATION");
         }
     }
+
+    public String getUID () {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
 
     /**
      * Abstract methods for all the activities

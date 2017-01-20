@@ -28,7 +28,7 @@ public class SignupPresenter extends BasePresenter implements SignupServerCallba
      * Presenter methods
      */
 
-    public void checkInformation (String email, String password) {
+    public void checkInformation (String username, String email, String password) {
         if (!checkEmail(email)) {
             return;
         }
@@ -37,7 +37,7 @@ public class SignupPresenter extends BasePresenter implements SignupServerCallba
         }
 
         mView.get().showProgressBar();
-        mInteractor.createUserWithEmailAndPassword(email, password);
+        mInteractor.createUserWithEmailAndPassword(username, email, password);
     }
 
     private boolean checkEmail (String email) {

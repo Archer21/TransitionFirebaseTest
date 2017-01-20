@@ -87,33 +87,34 @@ public class SignupActivity extends BaseActivity implements SignupViewModel {
     public void submitForm (View view) {
         String email = signupInputEmail.getText().toString().trim();
         String password = signupInputPassword.getText().toString().trim();
+        String username = signupInputUsername.getText().toString();
 
-
+        signupInputLayoutEmail.setErrorEnabled(false);
         signupInputLayoutEmail.setErrorEnabled(false);
         signupInputLayoutPassword.setErrorEnabled(false);
 
         progressBar.setVisibility(View.VISIBLE);
 
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        Snackbar.make(coordinatorLayout, getResources().getString(R.string.email_password_unsuccessful_signup_message) + " " + task.getException(), Snackbar.LENGTH_LONG).show();
-                        progressBar.setVisibility(View.GONE);
-                    } else {
-                        FirebaseUser user = task.getResult().getUser();
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(signupInputUsername.getText().toString())
-                                .build();
-
-                        user.updateProfile(profileUpdates);
-                        Helpers.navigate(SignupActivity.this, LoginActivity.class);
-                        finish();
-                    }
-                }
-            });
-        presenter.checkInformation(email, password);
+//        auth.createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                @Override
+//                public void onComplete(@NonNull Task<AuthResult> task) {
+//                    if (!task.isSuccessful()) {
+//                        Snackbar.make(coordinatorLayout, getResources().getString(R.string.email_password_unsuccessful_signup_message) + " " + task.getException(), Snackbar.LENGTH_LONG).show();
+//                        progressBar.setVisibility(View.GONE);
+//                    } else {
+//                        FirebaseUser user = task.getResult().getUser();
+//                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                                .setDisplayName(signupInputUsername.getText().toString())
+//                                .build();
+//
+//                        user.updateProfile(profileUpdates);
+//                        Helpers.navigate(SignupActivity.this, LoginActivity.class);
+//                        finish();
+//                    }
+//                }
+//            });
+        presenter.checkInformation(username, email, password);
     }
 
 
