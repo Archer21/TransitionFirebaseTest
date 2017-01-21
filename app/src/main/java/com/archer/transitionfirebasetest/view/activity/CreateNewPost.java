@@ -1,8 +1,10 @@
 package com.archer.transitionfirebasetest.view.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.archer.transitionfirebasetest.Manifest;
 import com.archer.transitionfirebasetest.MyApplication;
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.common.BaseActivity;
@@ -28,6 +31,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +67,9 @@ public class CreateNewPost extends BaseActivity {
     private String selectedCommunity;
     private DatabaseReference postReference;
 
+    private String mCropImageUri;
+    private String mAbsoluteCropImageUri;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +100,32 @@ public class CreateNewPost extends BaseActivity {
                 galleryAddPic();
             }
 
-            if (requestCode == IMG_RESULT) {
+//            if (requestCode == IMG_RESULT) {
+//
+//                Uri selectedImageURI = data.getData();
+//
+//                Picasso.with(CreateNewPost.this).load(selectedImageURI).into(imageView);
+//            }
 
-                Uri selectedImageURI = data.getData();
+            if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                Uri imageUri = CropImage.getPickImageResultUri(this, data);
 
-                Picasso.with(CreateNewPost.this).load(selectedImageURI).into(imageView);
+
+                mCropImageUri = "file:" + imageUri;
+                startCropImageActivity(imageUri);
+
             }
+
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Picasso.with(CreateNewPost.this).load(result.getUri()).into(imageView);
+                    Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                }
+            }
+
         }
 
     }
@@ -165,32 +193,13 @@ public class CreateNewPost extends BaseActivity {
         return communities;
     }
 
-    /**
-     * Methods for take a photo
-     */
 
-    private File createImageFile () throws IOException {
-        String timeStamps    = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamps + "_";
-        File   storageDir    = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        mCurrentAbsolutePhotoPath = image.getAbsolutePath();
-
-        return image;
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMultiTouchEnabled(true)
+                .start(this);
     }
-
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-
 
 
     /**
@@ -223,10 +232,39 @@ public class CreateNewPost extends BaseActivity {
     }
 
     public void selectPhotoFromGallery (View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        Intent intent = new Intent(Intent.ACTION_PICK,
+//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//        startActivityForResult(intent, IMG_RESULT);
+        CropImage.startPickImageActivity(this);
+    }
 
-        startActivityForResult(intent, IMG_RESULT);
+
+
+    /**
+     * Methods for take a photo
+     */
+
+    private File createImageFile () throws IOException {
+        String timeStamps    = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamps + "_";
+        File   storageDir    = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentAbsolutePhotoPath = image.getAbsolutePath();
+
+        return image;
+    }
+
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
 
