@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,10 +26,15 @@ import com.archer.transitionfirebasetest.common.BaseActivity;
 import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.domain.Community;
 import com.archer.transitionfirebasetest.domain.Post;
+import com.archer.transitionfirebasetest.util.Constants;
 import com.archer.transitionfirebasetest.util.Helpers;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -42,6 +48,7 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class CreateNewPost extends BaseActivity {
 
@@ -59,13 +66,16 @@ public class CreateNewPost extends BaseActivity {
     @BindView(R.id.button)
     Button button;
 
+
     private String mCurrentPhotoPath;
     private String mCurrentAbsolutePhotoPath;
 
     private MyApplication app;
     private List<String> userCommunities;
     private String selectedCommunity;
+
     private DatabaseReference postReference;
+    private StorageReference storageReference;
 
     private String mCropImageUri;
     private String mAbsoluteCropImageUri;
@@ -76,6 +86,7 @@ public class CreateNewPost extends BaseActivity {
 
         app = (MyApplication) getApplicationContext();
         postReference = app.getPostsReference();
+        storageReference = app.getStorageReference();
 
         userCommunities = getUserCommunitiesNames(getDummieCommunities());
         spinner.setItems(userCommunities);
@@ -96,41 +107,53 @@ public class CreateNewPost extends BaseActivity {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                Picasso.with(CreateNewPost.this).load(mCurrentPhotoPath).centerCrop().into(imageView);
+                Toast.makeText(this, mCurrentPhotoPath, Toast.LENGTH_SHORT).show();
+                Log.e("TARGET", mCurrentAbsolutePhotoPath);
+
+                Picasso.with(CreateNewPost.this).load(mCurrentPhotoPath).into(imageView);
                 galleryAddPic();
             }
 
-//            if (requestCode == IMG_RESULT) {
+            if (requestCode == IMG_RESULT) {
+
+                Uri selectedImageURI = data.getData();
+
+                File   storageDir    = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+
+                mCurrentAbsolutePhotoPath = selectedImageURI.getPath();
+
+                Toast.makeText(this, mCurrentAbsolutePhotoPath, Toast.LENGTH_SHORT).show();
+
+                Log.e("TARGET", mCurrentAbsolutePhotoPath);
+
+                Picasso.with(CreateNewPost.this).load(selectedImageURI).into(imageView);
+            }
+
+//            if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//                Uri imageUri = CropImage.getPickImageResultUri(this, data);
 //
-//                Uri selectedImageURI = data.getData();
 //
-//                Picasso.with(CreateNewPost.this).load(selectedImageURI).into(imageView);
+//                mCropImageUri = "file:" + imageUri;
+//                startCropImageActivity(imageUri);
+//
 //            }
-
-            if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                Uri imageUri = CropImage.getPickImageResultUri(this, data);
-
-
-                mCropImageUri = "file:" + imageUri;
-                startCropImageActivity(imageUri);
-
-            }
-
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if (resultCode == RESULT_OK) {
-                    Picasso.with(CreateNewPost.this).load(result.getUri()).into(imageView);
-                    Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                }
-            }
+//
+//            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//                if (resultCode == RESULT_OK) {
+//                    Picasso.with(CreateNewPost.this).load(result.getUri()).into(imageView);
+//                    Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+//                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                    Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+//                }
+//            }
 
         }
 
     }
 
-    public void createNewPost (View view) {
+    public void createNewPost (String imageUrl) {
         String body = content.getText().toString();
         String targetPublic = selectedCommunity;
         SharedPreferences sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE);
@@ -141,6 +164,7 @@ public class CreateNewPost extends BaseActivity {
         newPost.setUsername(username);
         newPost.setCommunity(targetPublic);
         newPost.setUid(getUID());
+        newPost.setUrlImage(imageUrl);
 
         canEditInformation(false);
 
@@ -232,13 +256,16 @@ public class CreateNewPost extends BaseActivity {
     }
 
     public void selectPhotoFromGallery (View view) {
-//        Intent intent = new Intent(Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//        startActivityForResult(intent, IMG_RESULT);
-        CropImage.startPickImageActivity(this);
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(intent, IMG_RESULT);
+//        CropImage.startPickImageActivity(this);
     }
 
+    public void uploadPost (View view) {
+        uploadFile();
+    }
 
 
     /**
@@ -259,7 +286,7 @@ public class CreateNewPost extends BaseActivity {
     }
 
 
-    private void galleryAddPic() {
+    private void galleryAddPic () {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
@@ -268,7 +295,27 @@ public class CreateNewPost extends BaseActivity {
     }
 
 
+    private void uploadFile () {
+        File file = new File(mCurrentAbsolutePhotoPath);
+        Uri contentUri = Uri.fromFile(file);
 
+        StorageReference imagesReferences = storageReference.child(Constants.FIREBASE_STORAGE_IMAGES + contentUri.getLastPathSegment());
+
+        UploadTask uploadTask = imagesReferences.putFile(contentUri);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreateNewPost.this, "Error subiendo la imagen", Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                String imageUrl = taskSnapshot.getDownloadUrl().toString();
+                createNewPost(imageUrl);
+            }
+        });
+    }
 
     @Override
     public int getLayout() {
