@@ -55,10 +55,9 @@
         android:id="@+id/selected_image"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:maxHeight="200dp"
+        android:maxHeight="250dp"
         android:layout_below="@+id/select_photos"
-        android:layout_marginTop="25dp"
-        android:scaleType="centerCrop"/>
+        android:layout_marginTop="25dp"/>
 
     <Button
         android:id="@+id/button"

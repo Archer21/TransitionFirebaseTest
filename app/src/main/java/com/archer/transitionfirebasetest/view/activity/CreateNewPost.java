@@ -96,7 +96,7 @@ public class CreateNewPost extends BaseActivity {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                Picasso.with(CreateNewPost.this).load(mCurrentPhotoPath).into(imageView);
+                Picasso.with(CreateNewPost.this).load(mCurrentPhotoPath).centerCrop().into(imageView);
                 galleryAddPic();
             }
 
