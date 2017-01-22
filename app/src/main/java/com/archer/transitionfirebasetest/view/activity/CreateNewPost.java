@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,8 +68,8 @@ public class CreateNewPost extends BaseActivity {
     private String selectedCommunity;
     private DatabaseReference postReference;
 
-    private String mCropImageUri;
-    private String mAbsoluteCropImageUri;
+//    private String mCropImageUri;
+//    private String mAbsoluteCropImageUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,31 +101,36 @@ public class CreateNewPost extends BaseActivity {
                 galleryAddPic();
             }
 
-//            if (requestCode == IMG_RESULT) {
+            if (requestCode == IMG_RESULT) {
+
+                Uri selectedImageURI = data.getData();
+
+                Log.e("URI", selectedImageURI.toString());
+                Log.e("PATH", selectedImageURI.getPath());
+                Log.e("LAST_PATH", selectedImageURI.getLastPathSegment());
+                Log.e("ENCODED_PATH", selectedImageURI.getEncodedPath());
+
+
+                Picasso.with(CreateNewPost.this).load(selectedImageURI).into(imageView);
+            }
+
+//            if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//                Uri imageUri = CropImage.getPickImageResultUri(this, data);
 //
-//                Uri selectedImageURI = data.getData();
+//                mCropImageUri = "file:" + imageUri;
+//                startCropImageActivity(imageUri);
 //
-//                Picasso.with(CreateNewPost.this).load(selectedImageURI).into(imageView);
 //            }
-
-            if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                Uri imageUri = CropImage.getPickImageResultUri(this, data);
-
-
-                mCropImageUri = "file:" + imageUri;
-                startCropImageActivity(imageUri);
-
-            }
-
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if (resultCode == RESULT_OK) {
-                    Picasso.with(CreateNewPost.this).load(result.getUri()).into(imageView);
-                    Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                }
-            }
+//
+//            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//                if (resultCode == RESULT_OK) {
+//                    Picasso.with(CreateNewPost.this).load(result.getUri()).into(imageView);
+//                    Toast.makeText(this, "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+//                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                    Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+//                }
+//            }
 
         }
 
@@ -232,11 +238,11 @@ public class CreateNewPost extends BaseActivity {
     }
 
     public void selectPhotoFromGallery (View view) {
-//        Intent intent = new Intent(Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//        startActivityForResult(intent, IMG_RESULT);
-        CropImage.startPickImageActivity(this);
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(intent, IMG_RESULT);
+//        CropImage.startPickImageActivity(this);
     }
 
 
