@@ -1,8 +1,6 @@
-package com.archer.transitionfirebasetest.view.activity;
+package com.archer.transitionfirebasetest.ui.activity;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -10,7 +8,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.archer.transitionfirebasetest.R;
@@ -19,12 +16,7 @@ import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.mvp.presenter.SignupPresenter;
 import com.archer.transitionfirebasetest.mvp.viewmodel.SignupViewModel;
 import com.archer.transitionfirebasetest.util.Helpers;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
 

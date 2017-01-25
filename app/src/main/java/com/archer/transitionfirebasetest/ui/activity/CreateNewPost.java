@@ -1,10 +1,8 @@
-package com.archer.transitionfirebasetest.view.activity;
+package com.archer.transitionfirebasetest.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -19,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.archer.transitionfirebasetest.Manifest;
 import com.archer.transitionfirebasetest.MyApplication;
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.common.BaseActivity;
@@ -48,7 +45,6 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class CreateNewPost extends BaseActivity {
 

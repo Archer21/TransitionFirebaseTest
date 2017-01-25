@@ -1,16 +1,11 @@
-package com.archer.transitionfirebasetest.view.activity;
+package com.archer.transitionfirebasetest.ui.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -21,22 +16,23 @@ import com.archer.transitionfirebasetest.adapter.PostAdapter;
 import com.archer.transitionfirebasetest.common.BaseActivity;
 import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.domain.Post;
+import com.archer.transitionfirebasetest.io.FirebaseApiAdapter;
+import com.archer.transitionfirebasetest.io.FirebaseApiService;
+import com.archer.transitionfirebasetest.io.response.PostResponse;
 import com.archer.transitionfirebasetest.util.Helpers;
 import com.archer.transitionfirebasetest.util.ItemOffsetDecorator;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
 
@@ -103,40 +99,26 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadPostsFromFirebase () {
-        ChildEventListener childEventListener = new ChildEventListener() {
+
+        Call<PostResponse> call = FirebaseApiAdapter.getApiService().getPostList();
+
+        call.enqueue(new Callback<PostResponse>() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.e(LOG_TAG, "AddedL:" + dataSnapshot.getKey());
-                Post post = dataSnapshot.getValue(Post.class);
-                adapter.addPost(post);
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                if (response.isSuccessful()) {
+                    adapter.addAll(response.body().getPostList());
+                    Log.e("SUCCES", "Ohhhh Yeahhh!");
+
+                } else {
+                    Log.e("ERROR", "SOME BROKE");
+                }
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.e(LOG_TAG, "Updated: " + dataSnapshot.getKey());
+            public void onFailure(Call<PostResponse> call, Throwable t) {
 
             }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.e(LOG_TAG, "Deleted:" + dataSnapshot.getKey());
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.e(LOG_TAG, "Moved:" + dataSnapshot.getKey());
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        postReference.addChildEventListener(childEventListener);
-
+        });
 
     }
 

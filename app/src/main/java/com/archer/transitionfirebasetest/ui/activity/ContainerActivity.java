@@ -1,9 +1,7 @@
-package com.archer.transitionfirebasetest.view.activity;
+package com.archer.transitionfirebasetest.ui.activity;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
@@ -11,9 +9,9 @@ import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.common.BaseActivity;
 import com.archer.transitionfirebasetest.common.BasePresenter;
 import com.archer.transitionfirebasetest.util.Helpers;
-import com.archer.transitionfirebasetest.view.fragment.HomeFragment;
-import com.archer.transitionfirebasetest.view.fragment.ProfileFragment;
-import com.archer.transitionfirebasetest.view.fragment.SearchFragment;
+import com.archer.transitionfirebasetest.ui.fragment.HomeFragment;
+import com.archer.transitionfirebasetest.ui.fragment.ProfileFragment;
+import com.archer.transitionfirebasetest.ui.fragment.SearchFragment;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 

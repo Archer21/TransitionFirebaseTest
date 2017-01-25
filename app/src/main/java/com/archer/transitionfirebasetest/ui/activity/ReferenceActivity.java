@@ -1,4 +1,4 @@
-package com.archer.transitionfirebasetest.view.activity;
+package com.archer.transitionfirebasetest.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

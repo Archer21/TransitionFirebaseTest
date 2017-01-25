@@ -1,7 +1,6 @@
 package com.archer.transitionfirebasetest.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.archer.transitionfirebasetest.R;
 import com.archer.transitionfirebasetest.domain.Post;
-import com.archer.transitionfirebasetest.view.activity.PostDetailActivity;
+import com.archer.transitionfirebasetest.ui.activity.PostDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
